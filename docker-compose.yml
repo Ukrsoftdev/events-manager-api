@@ -1,0 +1,32 @@
+version: '3.1'
+services:
+    postgres:
+        image: 'postgres:15-alpine'
+        container_name: postgres
+        working_dir: /application
+        volumes:
+            - '.:/application'
+        environment:
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=user
+            - POSTGRES_DB=syncwords_api
+        ports:
+            - '5432:5432'
+
+    webserver:
+        image: 'nginx:alpine'
+        container_name: webserver
+        working_dir: /application
+        volumes:
+            - '.:/application'
+            - './docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+        ports:
+            - '8001:80'
+
+    php:
+        build: docker/php
+        container_name: php
+        working_dir: /application
+        volumes:
+            - '.:/application'
+            - './docker/php/php-ini-overrides.ini:/etc/php/8.2/fpm/conf.d/99-overrides.ini'
