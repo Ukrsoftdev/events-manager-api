@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\LoginController;
+use App\Models\Organization;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::controller(LoginController::class)->name('user.')->group(function () {
+    Route::post('/user/login', 'authenticate')->name('login');
+
+    Route::get('/user/list', function (){
+        return Organization::all(['name', 'email']);
+    })->name('list');
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::controller(EventController::class)->name('event.')->group(function () {
+        Route::get('/list', 'list')->name('list');
+        Route::get('/{event}', 'show')->name('show');
+        Route::put('/{event}', 'replace')->name('replace');
+        Route::patch('/{event}', 'update')->name('update');
+        Route::delete('/{event}', 'delete')->name('delete');
+    });
 });
