@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('event_title', 200);
-            $table->timestampTz('event_start_date');
-            $table->timestampTz('event_end_date');
+            $table->timestamp('event_start_date');
+            $table->timestamp('event_end_date');
             $table->foreignId('organization_id')
                 ->constrained(table: 'organizations', indexName: 'organization_id')
                 ->onUpdate('cascade')

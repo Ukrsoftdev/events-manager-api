@@ -13,6 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         Organization::factory(10)->has(Event::factory()->count(300), 'events')->create();
+         Organization::factory(10)->has(Event::factory()->count(15), 'events')->create();
     }
 }

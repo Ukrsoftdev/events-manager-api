@@ -19,7 +19,7 @@ class EventFactory extends Factory
     {
         $event_start_date = fake()->dateTimeBetween('+0 days', '+1 years');
         $start_date_clone = clone $event_start_date;
-        $event_end_date = fake()->dateTimeBetween($event_start_date, $start_date_clone->modify('+5 days'));
+        $event_end_date = fake()->dateTimeBetween($event_start_date, $start_date_clone->modify('+12 hours'));
 
         return [
             'event_title' => fake()->sentence(),
