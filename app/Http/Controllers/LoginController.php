@@ -5,24 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Organization;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     /**
-     * Handle an authentication attempt.
+     * @param Request $request
+     * @return JsonResponse
      */
     public function authenticate(Request $request): JsonResponse
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', 'exists:organizations,email'],
             'password' => ['required'],
         ]);
 
-        /** @var $user Organization */
         $user = Organization::where('email', $request->email)->first();
 
-        if (Auth::attempt($credentials)) {
+        if (auth()->attempt($credentials) && $user) {
             return new JsonResponse($user->createToken($request->email)->toArray());
         }
 

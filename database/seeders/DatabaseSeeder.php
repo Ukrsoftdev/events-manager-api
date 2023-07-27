@@ -5,14 +5,17 @@ namespace Database\Seeders;
 use App\Models\Event;
 use App\Models\Organization;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * @return void
      */
     public function run(): void
     {
-         Organization::factory(10)->has(Event::factory()->count(15), 'events')->create();
+        /** @var Factory $factoryEvent */
+        $factoryEvent = Event::factory(15);
+         Organization::factory(10)->has($factoryEvent, 'events')->create();
     }
 }

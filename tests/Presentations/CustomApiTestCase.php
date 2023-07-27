@@ -3,6 +3,7 @@
 namespace Tests\Presentations;
 
 use App\Models\Organization;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Tests\TestCase;
 
 class CustomApiTestCase extends TestCase
@@ -12,11 +13,11 @@ class CustomApiTestCase extends TestCase
      */
     protected Organization $organization;
     /**
-     * @var string|mixed
+     * @var string
      */
     protected string $token;
     /**
-     * @var array|string[]
+     * @var array
      */
     protected array $headers;
 
@@ -26,7 +27,11 @@ class CustomApiTestCase extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->organization = Organization::first();
+        $this->organization = Organization::has('events', '>=', 2)->first();
+
+        if (!$this->organization) {
+            throw new NotFoundResourceException('Organization not found');
+        }
 
         $responseLogin = $this->post(
             '/api/user/login',

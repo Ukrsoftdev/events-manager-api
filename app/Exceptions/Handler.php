@@ -25,7 +25,8 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (NotFoundHttpException $e) {
             return response()->json([
-                'message' => 'Record not found.'
+                'message' => 'Record not found',
+                'errors' => [[$e->getMessage()]]
             ], 404);
         });
     }

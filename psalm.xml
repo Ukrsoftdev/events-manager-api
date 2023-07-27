@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="2"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+>
+    <projectFiles>
+        <directory name="app"/>
+        <directory name="database/factories"/>
+        <directory name="database/seeders"/>
+        <directory name="tests"/>
+        <file name="routes/api.php"/>
+        <ignoreFiles>
+            <directory name="vendor"/>
+        </ignoreFiles>
+    </projectFiles>
+    <issueHandlers>
+        <InvalidScope>
+            <errorLevel type="suppress">
+                <directory name="routes"/>
+            </errorLevel>
+        </InvalidScope>
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <directory name="tests/"/>
+                <directory name="database/"/>
+            </errorLevel>
+        </UnusedClass>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="app/Http/Middleware/"/>
+                <directory name="app/Http/Requests/"/>
+                <directory name="app/Http/Controllers/"/>
+            </errorLevel>
+        </PossiblyUnusedMethod>
+        <PossiblyUnusedProperty>
+            <errorLevel type="suppress">
+                <directory name="app/Http/Middleware/"/>
+            </errorLevel>
+        </PossiblyUnusedProperty>
+        <PossiblyNullPropertyAssignmentValue>
+            <errorLevel type="suppress">
+                <directory name="tests/"/>
+            </errorLevel>
+        </PossiblyNullPropertyAssignmentValue>
+        <PossiblyNullPropertyFetch>
+            <errorLevel type="suppress">
+                <directory name="tests/"/>
+            </errorLevel>
+        </PossiblyNullPropertyFetch>
+        <PossiblyNullReference>
+            <errorLevel type="suppress">
+                <directory name="tests/"/>
+            </errorLevel>
+        </PossiblyNullReference>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <directory name="tests/"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+        <PropertyTypeCoercion>
+            <errorLevel type="suppress">
+                <directory name="tests/"/>
+            </errorLevel>
+        </PropertyTypeCoercion>
+    </issueHandlers>
+<plugins><pluginClass class="Psalm\LaravelPlugin\Plugin"/></plugins></psalm>

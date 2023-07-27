@@ -30,7 +30,7 @@ class ReplaceEventRequest extends FormRequest
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public function messages(): array
     {

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\EventsByOrganizationId;
+use App\Models\Scopes\EventsByOrganizationIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Event extends Model
 {
@@ -13,15 +14,11 @@ class Event extends Model
     public const MAXIMUM_DURATION_EVENT_IN_HOURS = 12;
 
     /**
-     * Indicates if the model should be timestamped.
-     *
      * @var bool
      */
     public $timestamps = false;
 
     /**
-     * The attributes that should be cast.
-     *
      * @var array
      */
     protected $casts = [
@@ -29,15 +26,16 @@ class Event extends Model
         'event_end_date' => 'datetime:"Y-m-d H:i:s"',
     ];
 
-    public function organization()
+    /**
+     * @return BelongsTo
+     */
+    public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
     }
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * @var string[]
      */
     protected $fillable = [
         'event_title',
@@ -46,10 +44,12 @@ class Event extends Model
     ];
 
     /**
-     * The "booted" method of the model.
+     * @return void
      */
     protected static function booted(): void
     {
-        static::addGlobalScope(new EventsByOrganizationId());
+        if (auth()->user()) {
+            static::addGlobalScope(new EventsByOrganizationIdScope());
+        }
     }
 }
