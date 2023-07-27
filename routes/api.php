@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\LoginController;
-use App\Models\Organization;
+use App\Http\Controllers\OrganizationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,16 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(LoginController::class)->name('user.')->group(function () {
-    Route::post('/user/login', 'authenticate')->name('login');
-
-    Route::get('/user/list', function (){
-        return Organization::all(['name', 'email']);
-    })->name('list');
-});
+Route::post('user/login', [LoginController::class, 'authenticate'])->name('user.login');
+Route::get('organization/list', [OrganizationController::class, 'list'],)->name('organization.list');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::controller(EventController::class)->name('event.')->group(function () {
+    Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
         Route::get('/list', 'list')->name('list');
         Route::get('/{event}', 'show')->name('show');
         Route::put('/{event}', 'replace')->name('replace');
