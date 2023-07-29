@@ -1,0 +1,321 @@
+openapi: 3.0.0
+info:
+  title: OpenAPIdoc
+  description: OpenAPIdoc for List Organizations API
+  version: 1.0.1
+servers:
+  - url: https://ukrsoftdev.github.io/list-organiazation-api
+    description: Server from the GitHub repository
+  - url: http://localhost:8001/api
+    description: Local Docker Server
+paths:
+  /organization/list:
+    get:
+      tags: [ Organization ]
+      summary: Returns a list of Organizations
+      description: Returns a list of Organizations with data that need authorization.
+      responses:
+        200:
+          description: A JSON array of Organizations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organizations'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /auth/login:
+    post:
+      tags: [ Auth ]
+      summary: Authorization
+      description: Send request with login and password data and get token from response.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  required: true
+                  example: 'justine66@kassulke.com'
+                password:
+                  type: string
+                  required: true
+                  example: 'password'
+      responses:
+        200:
+          description: Return authorization data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalAccessToken'
+        404:
+          $ref: '#/components/responses/NotFound'
+        422:
+          $ref: '#/components/responses/UnprocessableContent'
+
+  /event/list:
+    get:
+      tags: [ Event ]
+      summary: Returns a list of Events
+      description: List of Events records for a authorized Organization
+      security:
+        - sanctumAuth: [ ]
+      responses:
+        200:
+          description: A JSON array of Events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Events'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /event/{id}:
+    parameters:
+      - $ref: '#/components/parameters/EventIdParam'
+    get:
+      tags: [ Event ]
+      summary: Show Event
+      description: Show a specific Event
+      security:
+        - sanctumAuth: [ ]
+      responses:
+        200:
+          description: Return object Event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Events'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [ Event ]
+      summary: Replace Event
+      description: Replace all data in a specific Event
+      security:
+        - sanctumAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_title:
+                  type: string
+                  required: true
+                  example: 'New Event title'
+                event_start_date:
+                  type: string
+                  required: true
+                  example: '2023-08-18 09:04:38'
+                event_end_date:
+                  type: string
+                  required: true
+                  example: '2023-08-18 12:45:52'
+      responses:
+        204:
+          description: No content
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        422:
+          $ref: '#/components/responses/UnprocessableContent'
+    patch:
+      tags: [ Event ]
+      summary: Update Event
+      description: Update one or more columns in a specific Event
+      security:
+        - sanctumAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_title:
+                  type: string
+                  required: false
+                  example: 'New Event title'
+                event_start_date:
+                  type: string
+                  required: false
+                  example: '2023-08-18 09:04:38'
+                event_end_date:
+                  type: string
+                  required: false
+                  example: '2023-08-18 12:45:52'
+      responses:
+        204:
+          description: No content
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        422:
+          $ref: '#/components/responses/UnprocessableContent'
+    delete:
+      tags: [ Event ]
+      summary: Delete Event
+      description: Delete a specific Event
+      security:
+        - sanctumAuth: [ ]
+      responses:
+        204:
+          description: No content
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    sanctumAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Organizations:
+      type: object
+      properties:
+        OrganizationId:
+          type: integer
+          example: 12447
+        OrganizationName:
+          type: string
+          example: 'Ward-West'
+        email:
+          type: string
+          example: 'mueller.elaina@pfannerstill.net'
+        password:
+          type: string
+          example: 'password'
+        countEvents:
+          type: integer
+          example: 7
+    PersonalAccessToken:
+      type: object
+      properties:
+        accessToken:
+          type: object
+          properties:
+            name:
+              type: string
+              example: dgoyette@kunze.com
+            abilities:
+              type: array
+              items:
+                type: string
+                example: '*'
+            expires_at:
+              type: string
+              example: null
+            tokenable_id:
+              type: integer
+              example: 1
+            tokenable_type:
+              type: string
+              example: 'App\\Models\\Organization'
+            updated_at:
+              type: string
+              example: '2023-07-27T13:20:42.000000Z'
+            created_at:
+              type: string
+              example: '2023-07-27T13:20:42.000000Z'
+            id:
+              type: integer
+              example: 191
+        plainTextToken:
+          type: string
+          example: '200|wiKjGfpPMYGD8qkBvZJLVcoRsychMEgTGoNm5iIG'
+    Events:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 76
+        event_title:
+          type: string
+          example: 'Fuga sequi aliquid voluptatem iusto esse beatae.'
+        event_start_date:
+          type: string
+          example: '2024-05-25 03:35:49'
+        event_end_date:
+          type: string
+          example: '2024-05-25 07:09:50'
+        organization_id:
+          type: integer
+          example: 6
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+
+  parameters:
+    EventIdParam:
+      name: id
+      in: path
+      description: Numeric ID of the Event
+      required: true
+      schema:
+        type: integer
+        example: 1
+
+  responses:
+    Unauthorized:
+      description: Unauthorized request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example: '{
+                      "message": "Unauthenticated",
+                      "errors": [
+                          [
+                              "Unauthenticated"
+                          ]
+                      ]
+                    }'
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example: '{
+                      "message": "Record not found",
+                      "errors": [
+                          [
+                              "No query results for model [App\\Models\\Event] 78"
+                          ]
+                      ]
+                    }'
+    UnprocessableContent:
+      description: Unprocessable Content
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example: '{
+                        "message": "The value event_end_date can`t be before the event_start_date",
+                        "errors": {
+                            "event_end_date": [
+                                "The value event_end_date can`t be before the event_start_date"
+                            ]
+                        }
+                    }'
