@@ -24,13 +24,13 @@ class UserLoginRouteTest extends TestCase
     {
         parent::setUp();
         $this->organization = Organization::first();
-        $this->url = route('user.login');
+        $this->url = route('auth.login');
     }
 
     /**
      * @return void
      */
-    public function test_successfully(): void
+    public function testRegisteredUserRouteCanLogIn(): void
     {
         $email = $this->organization->getAttribute('email');
 

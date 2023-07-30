@@ -23,7 +23,7 @@ class OrganizationListRouteTest extends TestCase
     /**
      * @return void
      */
-    public function test_successfully(): void
+    public function testOrganizationListRouteReturnedSameDBData(): void
     {
         $response = $this->get($this->url);
 

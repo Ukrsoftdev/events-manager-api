@@ -36,7 +36,7 @@ class EventUpdateRouteTest extends CustomApiTestCase
     /**
      * @return void
      */
-    public function test_successfully(): void
+    public function testEventUpdateRouteCanUpdate(): void
     {
         $this->patch($this->url, [
             'event_end_date' => $this->newEventEndDate

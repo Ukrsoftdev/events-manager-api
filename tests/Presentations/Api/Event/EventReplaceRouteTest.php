@@ -36,7 +36,7 @@ class EventReplaceRouteTest extends CustomApiTestCase
     /**
      * @return void
      */
-    public function test_successfully(): void
+    public function testEventReplaceRouteCanReplace(): void
     {
         $this->put($this->url, [
             'event_title' => $this->event->getAttribute('event_title'),

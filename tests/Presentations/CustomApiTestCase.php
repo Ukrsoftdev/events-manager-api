@@ -27,17 +27,22 @@ class CustomApiTestCase extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->organization = Organization::has('events', '>=', 2)->first();
+        $organization = Organization::has('events', '>=', 2)->first();
 
-        if (!$this->organization) {
+        if (is_null($organization)) {
             throw new NotFoundResourceException('Organization not found');
         }
 
+        $this->organization = $organization;
+        $email = $this->organization->getAttribute('email');
+        $url = route('auth.login');
+
         $responseLogin = $this->post(
-            '/api/user/login',
-            ['email' => $this->organization->getAttribute('email'), 'password' => 'password'],
+            $url,
+            ['email' => $email, 'password' => 'password'],
             ['Accept' => 'application/json']
         );
+
         $this->token = $responseLogin->json('plainTextToken');
         $this->headers = ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token];
     }

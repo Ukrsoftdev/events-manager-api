@@ -38,7 +38,7 @@ class EventDeleteRouteTest extends CustomApiTestCase
     /**
      * @return void
      */
-    public function test_successfully(): void
+    public function testEventDeleteRouteCanDelete(): void
     {
         $this->delete($this->url, [],$this->headers);
         static::assertEquals( null, Event::find($this->event->id));
