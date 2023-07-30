@@ -25,7 +25,7 @@ class EventListRouteTest extends CustomApiTestCase
     /**
      * @return void
      */
-    public function test_successfully(): void
+    public function testEventListRouteReturnedSameDBData(): void
     {
         $response = $this->get($this->url, $this->headers);
         $responseArray = array_map(function (array $item) {

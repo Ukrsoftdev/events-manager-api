@@ -30,7 +30,7 @@ class EventShowRouteTest extends CustomApiTestCase
     /**
      * @return void
      */
-    public function test_successfully(): void
+    public function testEventShowRouteReturnedSameDBData(): void
     {
         $response = $this->get($this->url, $this->headers);
         static::assertJson($response->content());

@@ -50,7 +50,7 @@
             "@test:phpunit",
             "@test:psalm"
         ],
-        "test:phpunit": "./vendor/bin/phpunit",
+        "test:phpunit": "php artisan test",
         "test:psalm": "./vendor/bin/psalm --no-diff --no-cache"
     },
     "extra": {

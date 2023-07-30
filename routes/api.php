@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('user/login', [LoginController::class, 'authenticate'])->name('user.login');
+Route::post('auth/login', [LoginController::class, 'authenticate'])->name('auth.login');
 Route::get('organization/list', [OrganizationController::class, 'list'],)->name('organization.list');
 
 Route::middleware('auth:sanctum')->group(function () {

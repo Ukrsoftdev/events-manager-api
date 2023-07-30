@@ -1,10 +1,10 @@
 openapi: 3.0.0
 info:
-  title: OpenAPIdoc
-  description: OpenAPIdoc for List Organizations API
-  version: 1.0.1
+  title: OpenAPI documentations
+  description: OpenAPIdoc for <a href="https://github.com/Ukrsoftdev/events-manager-api"><big>Events Manager API</big></a> application
+  version: 1.0-beta
 servers:
-  - url: https://ukrsoftdev.github.io/list-organiazation-api
+  - url: https://ukrsoftdev.github.io/events-manager-api/swagger/responses
     description: Server from the GitHub repository
   - url: http://localhost:8001/api
     description: Local Docker Server
@@ -12,7 +12,7 @@ paths:
   /organization/list:
     get:
       tags: [ Organization ]
-      summary: Returns a list of Organizations
+      summary: Organizations list
       description: Returns a list of Organizations with data that need authorization.
       responses:
         200:
@@ -20,16 +20,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Organizations'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organizations'
         404:
           $ref: '#/components/responses/NotFound'
 
   /auth/login:
     post:
       tags: [ Auth ]
-      summary: Authorization
+      summary: Auth login
       description: Send request with login and password data and get token from response.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -37,12 +40,13 @@ paths:
               properties:
                 email:
                   type: string
-                  required: true
                   example: 'justine66@kassulke.com'
                 password:
                   type: string
-                  required: true
                   example: 'password'
+              required:
+                - email
+                - password
       responses:
         200:
           description: Return authorization data
@@ -58,7 +62,7 @@ paths:
   /event/list:
     get:
       tags: [ Event ]
-      summary: Returns a list of Events
+      summary: Events list
       description: List of Events records for a authorized Organization
       security:
         - sanctumAuth: [ ]
@@ -81,7 +85,7 @@ paths:
       - $ref: '#/components/parameters/EventIdParam'
     get:
       tags: [ Event ]
-      summary: Show Event
+      summary: Event show
       description: Show a specific Event
       security:
         - sanctumAuth: [ ]
@@ -98,7 +102,7 @@ paths:
           $ref: '#/components/responses/NotFound'
     put:
       tags: [ Event ]
-      summary: Replace Event
+      summary: Event replace
       description: Replace all data in a specific Event
       security:
         - sanctumAuth: [ ]
@@ -111,16 +115,17 @@ paths:
               properties:
                 event_title:
                   type: string
-                  required: true
                   example: 'New Event title'
                 event_start_date:
                   type: string
-                  required: true
                   example: '2023-08-18 09:04:38'
                 event_end_date:
                   type: string
-                  required: true
                   example: '2023-08-18 12:45:52'
+              required:
+                - event_title
+                - event_start_date
+                - event_end_date
       responses:
         204:
           description: No content
@@ -132,7 +137,7 @@ paths:
           $ref: '#/components/responses/UnprocessableContent'
     patch:
       tags: [ Event ]
-      summary: Update Event
+      summary: Event update
       description: Update one or more columns in a specific Event
       security:
         - sanctumAuth: [ ]
@@ -145,15 +150,12 @@ paths:
               properties:
                 event_title:
                   type: string
-                  required: false
                   example: 'New Event title'
                 event_start_date:
                   type: string
-                  required: false
                   example: '2023-08-18 09:04:38'
                 event_end_date:
                   type: string
-                  required: false
                   example: '2023-08-18 12:45:52'
       responses:
         204:
@@ -166,7 +168,7 @@ paths:
           $ref: '#/components/responses/UnprocessableContent'
     delete:
       tags: [ Event ]
-      summary: Delete Event
+      summary: Event delete
       description: Delete a specific Event
       security:
         - sanctumAuth: [ ]
