@@ -23,7 +23,7 @@ class ReplaceEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_title' => ['required'],
+            'event_title' => ['required', 'max:200', 'string'],
             'event_start_date' => ['required', 'date'],
             'event_end_date' => ['required', 'date'],
         ];
@@ -35,9 +35,6 @@ class ReplaceEventRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'event_title.required' => 'The value event_title is required',
-            'event_start_date.required' => 'The value event_start_date is required',
-            'event_end_date.required' => 'The value event_end_date is required',
             'event_start_date.date' => 'The value event_start_date must be in datetime format "Y-m-d H:i:s"',
             'event_end_date.date' => 'The value event_end_date must be in datetime format "Y-m-d H:i:s"',
             'event_end_date.before' => ['event_end_date' => 'The value event_end_date can`t be before the event_start_date'],

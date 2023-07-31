@@ -23,9 +23,9 @@ class UpdateEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_title' => ['filled'],
-            'event_start_date' => ['filled', 'date'],
-            'event_end_date' => ['filled', 'date'],
+            'event_title' => ['filled', 'max:200', 'string', 'required_without_all:event_start_date,event_end_date'],
+            'event_start_date' => ['filled', 'date', 'required_without_all:event_title,event_end_date'],
+            'event_end_date' => ['filled', 'date', 'required_without_all:event_title,event_start_date'],
         ];
     }
 
@@ -35,9 +35,6 @@ class UpdateEventRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'event_title.filled' => 'The value event_title can`t be empty',
-            'event_start_date.filled' => 'The value event_start_date can`t be empty',
-            'event_end_date.filled' => 'The value event_end_date can`t be empty',
             'event_start_date.date' => 'The value event_start_date must be in datetime format "Y-m-d H:i:s"',
             'event_end_date.date' => 'The value event_end_date must be in datetime format "Y-m-d H:i:s"',
             'event_end_date.before' => ['event_end_date' => 'The value event_end_date can`t be before the event_start_date'],

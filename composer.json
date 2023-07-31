@@ -1,7 +1,7 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "About\nThis is simple example of RESTful API service, based on the Laravel frameworks.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {

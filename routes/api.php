@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrganizationController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('auth/login', [LoginController::class, 'authenticate'])->name('auth.login');
+Route::post('auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('organization/list', [OrganizationController::class, 'list'],)->name('organization.list');
 
 Route::middleware('auth:sanctum')->group(function () {
