@@ -264,9 +264,9 @@ components:
         message:
           type: string
         errors:
-          type: array
-          items:
-            type: string
+          oneOf:
+            - type: object
+            - type: string
 
   parameters:
     EventIdParam:
@@ -287,11 +287,7 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
           example: '{
                       "message": "Unauthenticated",
-                      "errors": [
-                          [
-                              "Unauthenticated"
-                          ]
-                      ]
+                      "errors": "Unauthenticated"
                     }'
     NotFound:
       description: Not Found
@@ -301,11 +297,7 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
           example: '{
                       "message": "Record not found",
-                      "errors": [
-                          [
-                              "No query results for model [App\\Models\\Event] 78"
-                          ]
-                      ]
+                      "errors": "No query results for model [App\\Models\\Event] 78"
                     }'
     UnprocessableContent:
       description: Unprocessable Content

@@ -2,14 +2,15 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Auth\AuthenticationException;
+use Exception;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * The list of the inputs that are never flashed to the session on validation exceptions.
-     *
      * @var array<int, string>
      */
     protected $dontFlash = [
@@ -19,15 +20,31 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
+     * @return void
      */
     public function register(): void
     {
-        $this->renderable(function (NotFoundHttpException $e) {
-            return response()->json([
-                'message' => 'Record not found',
-                'errors' => [[$e->getMessage()]]
-            ], 404);
+        $this->renderable(function (Exception $exception) {
+            if ($exception instanceof AuthenticationException) {
+                return response()->json([
+                    'message' => 'Unauthenticated',
+                    'errors' => $exception->getMessage()
+                ], 401);
+            }
+
+            if ($exception instanceof NotFoundHttpException) {
+                return response()->json([
+                    'message' => 'Not Found',
+                    'errors' => $exception->getMessage()
+                ], 404);
+            }
+
+            if ($exception instanceof QueryException) {
+                return response()->json([
+                    'message' => 'Not Found',
+                    'errors' => 'Resources not found'
+                ], 404);
+            }
         });
     }
 }
