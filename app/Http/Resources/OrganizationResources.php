@@ -15,11 +15,11 @@ class OrganizationResources extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'OrganizationId' => $this->id,
-            'OrganizationName' => $this->name,
+            'organization_id' => $this->id,
+            'organization_name' => $this->name,
             'email' => $this->email,
             'password' => 'password',
-            'countEvents' => $this->events()->count(),
+            'count_events' => $this->events()->count(),
         ];
     }
 }
