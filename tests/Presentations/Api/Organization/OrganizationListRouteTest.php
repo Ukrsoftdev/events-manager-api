@@ -2,6 +2,7 @@
 
 namespace Tests\Presentations\Api\Organization;
 
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class OrganizationListRouteTest extends TestCase
@@ -27,7 +28,7 @@ class OrganizationListRouteTest extends TestCase
     {
         $response = $this->get($this->url);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
         static::assertJson($response->content());
     }
 }

@@ -28,7 +28,6 @@ class CustomApiTestCase extends TestCase
     {
         parent::setUp();
         $organization = Organization::has('events', '>=', 2)->first();
-
         if (is_null($organization)) {
             throw new NotFoundResourceException('Organization not found');
         }
