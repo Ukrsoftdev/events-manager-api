@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Event;
+use App\Rules\IsEndDateBeforeStartRule;
+use App\Rules\IsNotMoreMaxDurationRule;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
 
-class ReplaceEventRequest extends FormRequest
+final class ReplaceEventRequest extends FormRequest
 {
     /**
      * @return bool
@@ -23,9 +23,21 @@ class ReplaceEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_title' => ['required', 'max:200', 'string'],
-            'event_start_date' => ['required', 'date'],
-            'event_end_date' => ['required', 'date'],
+            'event_title' => [
+                'required',
+                'max:200',
+                'string'
+            ],
+            'event_start_date' => [
+                'required',
+                'date'
+            ],
+            'event_end_date' => [
+                'required',
+                'date',
+                new IsEndDateBeforeStartRule(new Carbon($this->get('event_start_date')), new Carbon($this->get('event_end_date'))),
+                new IsNotMoreMaxDurationRule(new Carbon($this->get('event_start_date')), new Carbon($this->get('event_end_date')))
+            ],
         ];
     }
 
@@ -40,22 +52,5 @@ class ReplaceEventRequest extends FormRequest
             'event_end_date.before' => ['event_end_date' => 'The value event_end_date can`t be before the event_start_date'],
             'event_end_date.exceed' => ['event_end_date' => 'The duration between the event_start_date and event_end_date cannot exceed 12 hours'],
         ];
-    }
-
-    /**
-     * @return void
-     */
-    protected function passedValidation(): void
-    {
-        $start = new Carbon($this->get('event_start_date'));
-        $end = new Carbon($this->get('event_end_date'));
-
-        if ($end->isBefore($start)) {
-            throw ValidationException::withMessages([$this->messages()['event_end_date.before']]);
-        }
-
-        if ($end->diffInHours($start) >= Event::MAXIMUM_DURATION_EVENT_IN_HOURS) {
-            throw ValidationException::withMessages([$this->messages()['event_end_date.exceed']]);
-        }
     }
 }

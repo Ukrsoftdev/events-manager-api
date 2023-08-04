@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
-class EventsByOrganizationIdScope implements Scope
+final class EventsByOrganizationIdScope implements Scope
 {
     /**
      * @param Builder $builder

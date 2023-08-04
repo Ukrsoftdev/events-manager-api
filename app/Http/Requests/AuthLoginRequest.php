@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthLoginRequest extends FormRequest
+final class AuthLoginRequest extends FormRequest
 {
     /**
      * @return bool

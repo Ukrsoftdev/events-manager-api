@@ -49,7 +49,7 @@ By default, you can use Swagger OpenAPIdoc with two server:
   <tr>
     <td>PHP 8.1+ <br>Postgres <br>Composer <br>Docker <br>Laravel 10+ </td>
     <td>- <b>Authorization</b> throw laravel/sanctum <br>- <b>Code review</b> with psalm/plugin-laravel <br>- <b>Tests</b> with phpunit/phpunit <br>- <b>OpenAPI documentation</b> - with Swagger and deployed throw GitHub Pages</td>
-    <td>EloquentModels <br>Scopes <br>Migrations <br>Seeds <br>Factories <br>Controllers <br>Requests <br>Resources</td>
+    <td>EloquentModels <br>Scopes <br>Migrations <br>Seeds <br>Factories <br>Controllers <br>Requests <br>Rules <br>Resources</td>
   </tr>  
 </table>
 
