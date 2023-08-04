@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\EventsByOrganizationIdScope;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Validation\UnauthorizedException;
 
 class Event extends Model
 {
@@ -44,12 +46,16 @@ class Event extends Model
     ];
 
     /**
+     * @param Builder $query
      * @return void
+     * @throws AuthenticationException
      */
-    protected static function booted(): void
+    public function scopeByOrganization(Builder $query): void
     {
-        if (auth()->user()) {
-            static::addGlobalScope(new EventsByOrganizationIdScope());
+        if (null === $user = auth()->user()) {
+            throw new UnauthorizedException();
         }
+
+        $query->where('organization_id', $user->getAuthIdentifier());
     }
 }

@@ -17,14 +17,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('auth/login', [AuthController::class, 'login'])->name('auth.login');
-Route::get('organization/list', [OrganizationController::class, 'list'],)->name('organization.list');
+Route::get('organization/list', [OrganizationController::class, 'list'])->name('organization.list');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::controller(EventController::class)->prefix('event')->name('event.')->group(function () {
+
         Route::get('/list', 'list')->name('list');
-        Route::get('/{event}', 'show')->name('show');
-        Route::put('/{event}', 'replace')->name('replace');
-        Route::patch('/{event}', 'update')->name('update');
-        Route::delete('/{event}', 'delete')->name('delete');
+
+        Route::middleware('can:manage,event')->group(function () {
+            Route::get('/{event}', 'show')->name('show');
+            Route::put('/{event}', 'replace')->name('replace');
+            Route::patch('/{event}', 'update')->name('update');
+            Route::delete('/{event}', 'delete')->name('delete');
+        });
     });
 });

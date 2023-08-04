@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Auth\AuthenticationException;
 use Exception;
@@ -40,6 +41,13 @@ class Handler extends ExceptionHandler
             }
 
             if ($exception instanceof QueryException) {
+                return response()->json([
+                    'message' => 'Not Found',
+                    'errors' => 'Resources not found'
+                ], 404);
+            }
+
+            if ($exception instanceof HttpException) {
                 return response()->json([
                     'message' => 'Not Found',
                     'errors' => 'Resources not found'

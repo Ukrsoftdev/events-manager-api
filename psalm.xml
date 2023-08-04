@@ -35,6 +35,7 @@
                 <directory name="app/Http/Middleware/"/>
                 <directory name="app/Http/Requests/"/>
                 <directory name="app/Http/Controllers/"/>
+                <directory name="app/Policies/"/>
             </errorLevel>
         </PossiblyUnusedMethod>
         <PossiblyUnusedProperty>

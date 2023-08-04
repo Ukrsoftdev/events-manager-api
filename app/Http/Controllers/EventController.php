@@ -16,7 +16,7 @@ class EventController extends Controller
      */
     public function list(): JsonResponse
     {
-        return response()->json(EventResource::collection(Event::all()));
+        return response()->json(EventResource::collection(Event::byOrganization()->get()));
     }
 
     /**
