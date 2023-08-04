@@ -3,6 +3,7 @@
 namespace Tests\Presentations\Api\User;
 
 use App\Models\Organization;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class UserLoginRouteTest extends TestCase
@@ -40,7 +41,7 @@ class UserLoginRouteTest extends TestCase
             ['Accept' => 'application/json']
         );
 
-        $responseLogin->assertStatus(200);
+        $responseLogin->assertStatus(Response::HTTP_OK);
         static::assertJson($responseLogin->content());
         static::assertArrayHasKey('plainTextToken', $responseLogin->json());
     }

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
 {
@@ -15,7 +16,7 @@ class EventController extends Controller
      */
     public function list(): JsonResponse
     {
-        return response()->json(EventResource::collection(Event::all()));
+        return response()->json(EventResource::collection(Event::byOrganization()->get()));
     }
 
     /**
@@ -36,7 +37,7 @@ class EventController extends Controller
     {
         $event->update($request->validated());
 
-        return response()->json([], 204);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -48,7 +49,7 @@ class EventController extends Controller
     {
         $event->update($request->validated());
 
-        return response()->json([], 204);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -59,6 +60,6 @@ class EventController extends Controller
     {
         $event->delete();
 
-        return response()->json([], 204);
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

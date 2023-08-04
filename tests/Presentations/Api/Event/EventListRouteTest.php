@@ -2,8 +2,6 @@
 
 namespace Tests\Presentations\Api\Event;
 
-use App\Models\Event;
-use App\Models\Scopes\EventsByOrganizationIdScope;
 use Tests\Presentations\CustomApiTestCase;
 
 class EventListRouteTest extends CustomApiTestCase
@@ -33,6 +31,6 @@ class EventListRouteTest extends CustomApiTestCase
         }, $response->json());
 
         static::assertJson($response->content());
-        static::assertEquals(Event::withoutGlobalScope(EventsByOrganizationIdScope::class)->get(['id'])->toArray(), $responseArray);
+        static::assertEquals($this->organization->events()->get(['id'])->toArray(), $responseArray);
     }
 }

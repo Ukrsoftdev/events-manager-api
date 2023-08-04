@@ -3,11 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Models\Event;
+use App\Rules\IsEndDateBeforeStartRule;
+use App\Rules\IsNotMoreMaxDurationRule;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
 
-class UpdateEventRequest extends FormRequest
+final class UpdateEventRequest extends FormRequest
 {
     /**
      * @return bool
@@ -23,9 +24,25 @@ class UpdateEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_title' => ['filled', 'max:200', 'string', 'required_without_all:event_start_date,event_end_date'],
-            'event_start_date' => ['filled', 'date', 'required_without_all:event_title,event_end_date'],
-            'event_end_date' => ['filled', 'date', 'required_without_all:event_title,event_start_date'],
+            'event_title' => [
+                'filled',
+                'max:200',
+                'string',
+                'required_without_all:event_start_date,event_end_date'
+            ],
+            'event_start_date' => [
+                'filled', 'date',
+                'required_without_all:event_title,event_end_date',
+                request()->has('event_end_date') ? null : new IsEndDateBeforeStartRule($this->getDateByKey('event_start_date'), $this->getDateByKey('event_end_date')),
+                request()->has('event_end_date') ? null : new IsNotMoreMaxDurationRule($this->getDateByKey('event_start_date'), $this->getDateByKey('event_end_date'))
+            ],
+            'event_end_date' => [
+                'filled',
+                'date',
+                'required_without_all:event_title,event_start_date',
+                new IsEndDateBeforeStartRule($this->getDateByKey('event_start_date'), $this->getDateByKey('event_end_date')),
+                new IsNotMoreMaxDurationRule($this->getDateByKey('event_start_date'), $this->getDateByKey('event_end_date'))
+            ],
         ];
     }
 
@@ -43,31 +60,13 @@ class UpdateEventRequest extends FormRequest
     }
 
     /**
-     * @return void
-     * @throws ValidationException
-     */
-    protected function passedValidation(): void
-    {
-        $start = $this->getDateValueByKeyFromModel('event_start_date');
-        $end = $this->getDateValueByKeyFromModel('event_end_date');
-
-        if ($end->isBefore($start)) {
-            throw ValidationException::withMessages(['event_end_date' => 'The value event_end_date can`t be before the event_start_date',]);
-        }
-
-        if ($end->diffInHours($start) >= Event::MAXIMUM_DURATION_EVENT_IN_HOURS) {
-            throw ValidationException::withMessages(['event_end_date' => 'The duration between the event_start_date and event_end_date cannot exceed 12 hours',]);
-        }
-    }
-
-    /**
      * @param string $key
      * @return Carbon
      */
-    private function getDateValueByKeyFromModel(string $key): Carbon
+    private function getDateByKey(string $key): Carbon
     {
-        if ($this->{$key}) {
-            return new Carbon($this->{$key});
+        if (request()->has($key)) {
+            return new Carbon(request()->all()[$key]);
         }
 
         /** @var Event $event */
