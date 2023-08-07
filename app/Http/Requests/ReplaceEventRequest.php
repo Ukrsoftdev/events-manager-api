@@ -9,17 +9,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 final class ReplaceEventRequest extends FormRequest
 {
-    /**
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * @return array[]
-     */
     public function rules(): array
     {
         return [
@@ -41,9 +35,6 @@ final class ReplaceEventRequest extends FormRequest
         ];
     }
 
-    /**
-     * @return array
-     */
     public function messages(): array
     {
         return [

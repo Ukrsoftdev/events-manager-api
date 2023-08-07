@@ -43,21 +43,6 @@
                 <directory name="app/Http/Middleware/"/>
             </errorLevel>
         </PossiblyUnusedProperty>
-        <PossiblyNullPropertyAssignmentValue>
-            <errorLevel type="suppress">
-                <directory name="tests/"/>
-            </errorLevel>
-        </PossiblyNullPropertyAssignmentValue>
-        <PossiblyNullPropertyFetch>
-            <errorLevel type="suppress">
-                <directory name="tests/"/>
-            </errorLevel>
-        </PossiblyNullPropertyFetch>
-        <PossiblyNullReference>
-            <errorLevel type="suppress">
-                <directory name="tests/"/>
-            </errorLevel>
-        </PossiblyNullReference>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <directory name="tests/"/>

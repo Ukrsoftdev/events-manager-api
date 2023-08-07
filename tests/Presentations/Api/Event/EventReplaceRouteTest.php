@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Presentations\Api\Event;
 
 use App\Models\Event;
-use Tests\Presentations\CustomApiTestCase;
+use Tests\Presentations\AuthorizeApiTestCase;
 
-class EventReplaceRouteTest extends CustomApiTestCase
+final class EventReplaceRouteTest extends AuthorizeApiTestCase
 {
     /**
      * @var Event
@@ -28,9 +29,19 @@ class EventReplaceRouteTest extends CustomApiTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->event = $this->organization->events()->first();
-        $this->url = route('event.replace', ['event' => $this->event->id]);
-        $this->newEventEndDate = $this->event->getAttribute('event_start_date')->add('2 hours 30 minutes')->toDateTimeString();
+
+        $event = $this->organization->events()->first();
+        if (! $event instanceof Event) {
+            $this->markTestSkipped(
+                'Event not found'
+            );
+        }
+
+        $id = $event->getAttribute('id');
+
+        $this->event = $event;
+        $this->url = route('event.replace', ['event' => $id]);
+        $this->newEventEndDate = $event->getAttribute('event_start_date')->add('2 hours 30 minutes')->toDateTimeString();
     }
 
     /**
@@ -44,6 +55,7 @@ class EventReplaceRouteTest extends CustomApiTestCase
             'event_end_date' => $this->newEventEndDate
         ], $this->headers);
 
+        /** @var Event $updatedEvent */
         $updatedEvent = $this->event->fresh();
         static::assertEquals($updatedEvent->getAttribute('event_end_date')->toDateTimeString(), $this->newEventEndDate);
     }

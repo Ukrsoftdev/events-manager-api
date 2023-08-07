@@ -10,17 +10,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 final class UpdateEventRequest extends FormRequest
 {
-    /**
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * @return array[]
-     */
     public function rules(): array
     {
         return [
@@ -46,9 +40,6 @@ final class UpdateEventRequest extends FormRequest
         ];
     }
 
-    /**
-     * @return array
-     */
     public function messages(): array
     {
         return [
@@ -59,10 +50,6 @@ final class UpdateEventRequest extends FormRequest
         ];
     }
 
-    /**
-     * @param string $key
-     * @return Carbon
-     */
     private function getDateByKey(string $key): Carbon
     {
         if (request()->has($key)) {

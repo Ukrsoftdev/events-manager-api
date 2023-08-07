@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Presentations\Api\Organization;
 
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class OrganizationListRouteTest extends TestCase
+final class OrganizationListRouteTest extends TestCase
 {
     /**
      * @var string
