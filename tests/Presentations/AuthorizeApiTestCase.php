@@ -1,12 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Presentations;
 
+use App\Models\Event;
 use App\Models\Organization;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Tests\TestCase;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CustomApiTestCase extends TestCase
+abstract class AuthorizeApiTestCase extends TestCase
 {
     /**
      * @var Organization
@@ -27,14 +29,16 @@ class CustomApiTestCase extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $organization = Organization::has('events', '>=', 2)->first();
-        if (is_null($organization)) {
-            throw new NotFoundResourceException('Organization not found');
-        }
+        /** @var Factory $factoryEvent */
+        $factoryEvent = Event::factory(1);
+        $organization = Organization::factory(1)->has($factoryEvent, 'events')->create();
+
+        /** @var Organization $organization */
+        $organization = $organization->first();
+        $email = $organization->getAttribute('email');
+        $url = route('auth.login');
 
         $this->organization = $organization;
-        $email = $this->organization->getAttribute('email');
-        $url = route('auth.login');
 
         $responseLogin = $this->post(
             $url,
@@ -44,5 +48,10 @@ class CustomApiTestCase extends TestCase
 
         $this->token = $responseLogin->json('plainTextToken');
         $this->headers = ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token];
+    }
+
+    protected function tearDown(): void
+    {
+        $this->organization->delete();
     }
 }

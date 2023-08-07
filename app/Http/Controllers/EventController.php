@@ -11,28 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
 {
-    /**
-     * @return JsonResponse
-     */
-    public function list(): JsonResponse
+    public function list(Event $event): JsonResponse
     {
-        return response()->json(EventResource::collection(Event::byOrganization()->get()));
+        return response()->json(EventResource::collection($event->byAuthOrganization()->get()));
     }
 
-    /**
-     * @param Event $event
-     * @return JsonResponse
-     */
     public function show(Event $event): JsonResponse
     {
         return response()->json(new EventResource($event));
     }
 
-    /**
-     * @param Event $event
-     * @param ReplaceEventRequest $request
-     * @return JsonResponse
-     */
     public function replace(Event $event, ReplaceEventRequest $request): JsonResponse
     {
         $event->update($request->validated());
@@ -40,11 +28,6 @@ class EventController extends Controller
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @param Event $event
-     * @param UpdateEventRequest $request
-     * @return JsonResponse
-     */
     public function update(Event $event, UpdateEventRequest $request): JsonResponse
     {
         $event->update($request->validated());
@@ -52,10 +35,6 @@ class EventController extends Controller
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @param Event $event
-     * @return JsonResponse
-     */
     public function delete(Event $event): JsonResponse
     {
         $event->delete();

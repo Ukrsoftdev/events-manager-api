@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Presentations\Api\Event;
 
 use App\Models\Event;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Tests\Presentations\CustomApiTestCase;
+use Tests\Presentations\AuthorizeApiTestCase;
 
-class EventDeleteRouteTest extends CustomApiTestCase
+final class EventDeleteRouteTest extends AuthorizeApiTestCase
 {
     /**
      * @var Event
@@ -24,15 +24,18 @@ class EventDeleteRouteTest extends CustomApiTestCase
     public function setUp(): void
     {
         parent::setUp();
+
         $event = $this->organization->events()->first();
-
         if (! $event instanceof Event) {
-            throw new NotFoundResourceException();
+            $this->markTestSkipped(
+                'Event not found'
+            );
         }
-        $this->event = $event;
 
-        $id = $this->event->id;
+        $id = $event->getAttribute('id');
+        $this->event = $event;
         $this->url = route('event.delete', ['event' => $id]);
+
     }
 
     /**

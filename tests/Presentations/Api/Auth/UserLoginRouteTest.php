@@ -1,12 +1,13 @@
 <?php
+declare(strict_types=1);
 
-namespace Tests\Presentations\Api\User;
+namespace Tests\Presentations\Api\Auth;
 
 use App\Models\Organization;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
-class UserLoginRouteTest extends TestCase
+final class UserLoginRouteTest extends TestCase
 {
     /**
      * @var Organization
@@ -24,7 +25,14 @@ class UserLoginRouteTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->organization = Organization::first();
+        $organization = Organization::first();
+        if (! $organization instanceof Organization) {
+            $this->markTestSkipped(
+                'Event not found'
+            );
+        }
+
+        $this->organization = $organization;
         $this->url = route('auth.login');
     }
 

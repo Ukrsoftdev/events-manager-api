@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Presentations\Api\Event;
 
-use Tests\Presentations\CustomApiTestCase;
+use Tests\Presentations\AuthorizeApiTestCase;
 
-class EventListRouteTest extends CustomApiTestCase
+final class EventListRouteTest extends AuthorizeApiTestCase
 {
     /**
      * @var string

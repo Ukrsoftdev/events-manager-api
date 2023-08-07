@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Presentations\Api\Event;
 
 use App\Models\Event;
-use Tests\Presentations\CustomApiTestCase;
+use Tests\Presentations\AuthorizeApiTestCase;
 
-class EventShowRouteTest extends CustomApiTestCase
+final class EventShowRouteTest extends AuthorizeApiTestCase
 {
     /**
      * @var Event
@@ -23,8 +24,16 @@ class EventShowRouteTest extends CustomApiTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->event = $this->organization->events()->first();
-        $this->url = route('event.show', ['event' => $this->event->id]);
+        $event = $this->organization->events()->first();
+        if (! $event instanceof Event) {
+            $this->markTestSkipped(
+                'Event not found'
+            );
+        }
+
+        $id = $event->getAttribute('id');
+        $this->event = $event;
+        $this->url = route('event.show', ['event' => $id]);
     }
 
     /**

@@ -8,9 +8,6 @@ use Illuminate\Http\JsonResponse;
 
 class OrganizationController extends Controller
 {
-    /**
-     * @return JsonResponse
-     */
     public function list(): JsonResponse
     {
         return response()->json(OrganizationResources::collection(Organization::all()));
